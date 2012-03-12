@@ -1,10 +1,10 @@
 # see: http://www.ocaml.info/home/ocaml_sources.html#toc16
 
 # put here the names of your source files (in the right order)
-SOURCES = lexer.mll
+SOURCES = tree.ml parser.mly lexer.mll
 
 # the name of the resulting executable
-RESULT  = executable
+RESULT  = bin/funell
 
 # generate type information (.annot files)
 ANNOTATE = yes

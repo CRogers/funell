@@ -1,3 +1,10 @@
 .dist-buildwrapper/
 .paths
 .settings/
+*.cmo
+*.cmi
+*.mli
+*.annot
+._bcdi/
+._d/
+bin/
