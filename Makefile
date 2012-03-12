@@ -1,7 +1,7 @@
 # see: http://www.ocaml.info/home/ocaml_sources.html#toc16
 
 # put here the names of your source files (in the right order)
-SOURCES = tree.ml parser.mly lexer.mll
+SOURCES = tree.ml parser.mly lexer.mll print.ml main.ml
 
 # the name of the resulting executable
 RESULT  = bin/funell

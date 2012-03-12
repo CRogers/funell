@@ -15,10 +15,22 @@ let kwtable =
 
 let lookup s = try Hashtbl.find kwtable s with Not_found -> IDENT s  
 
+let lastIndent = ref 0
+
 }
 
-let types = ['A'-'Z']['a'-'z']+
+let types = ['A'-'Z']['a'-'z''A'-'Z''0'-'9']*
+let idents = ['a'-'z''A'-'Z''0'-'9']+
+let white = ['\t'' ']
+let newline = '\n'
 
 rule token = parse
-	  types					{ TYPE (lexeme lexbuf) }
+	| newline white*		{ let indent = String.length (lexeme lexbuf) - 1 and li = !lastIndent in
+							  lastIndent := indent;
+							  if indent == li then SEP
+							  else (if indent > li then INDENT else OUTDENT) }
+	| white+				{ token lexbuf }
+	| types					{ TYPE (lexeme lexbuf) }
+	| idents				{ IDENT (lexeme lexbuf) }
 	| eof					{ EOF }
+	| _						{ BADTOK }

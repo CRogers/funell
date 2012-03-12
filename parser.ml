@@ -3,18 +3,26 @@ type token =
   | OPERATOR of (string)
   | TYPE of (string)
   | INTEGER of (int)
+  | INDENT
+  | OUTDENT
+  | SEP
   | EOF
   | LET
+  | BADTOK
 
 open Parsing;;
-# 9 "parser.mly"
+# 11 "parser.mly"
 
 open Tree
 
-# 15 "parser.ml"
+# 19 "parser.ml"
 let yytransl_const = [|
+  261 (* INDENT *);
+  262 (* OUTDENT *);
+  263 (* SEP *);
     0 (* EOF *);
-  261 (* LET *);
+  264 (* LET *);
+  265 (* BADTOK *);
     0|]
 
 let yytransl_block = [|
@@ -53,8 +61,12 @@ let yycheck = "\001\000\
 \000\000"
 
 let yynames_const = "\
+  INDENT\000\
+  OUTDENT\000\
+  SEP\000\
   EOF\000\
   LET\000\
+  BADTOK\000\
   "
 
 let yynames_block = "\
@@ -68,9 +80,9 @@ let yyact = [|
   (fun _ -> failwith "parser")
 ; (fun __caml_parser_env ->
     Obj.repr(
-# 17 "parser.mly"
-             ( Program "foo" )
-# 74 "parser.ml"
+# 19 "parser.mly"
+          ( Program "foo" )
+# 86 "parser.ml"
                : Tree.program))
 (* Entry program *)
 ; (fun __caml_parser_env -> raise (Parsing.YYexit (Parsing.peek_val __caml_parser_env 0)))
