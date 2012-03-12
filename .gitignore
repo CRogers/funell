@@ -8,3 +8,6 @@
 ._bcdi/
 ._d/
 bin/
+
+lexer.ml
+parser.ml
