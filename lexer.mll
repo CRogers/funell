@@ -21,6 +21,7 @@ let lastIndent = ref 0
 
 let types = ['A'-'Z']['a'-'z''A'-'Z''0'-'9']*
 let idents = ['a'-'z''A'-'Z''0'-'9']+
+let operators = ['<''>''.'':''|''\\''?''='':''~''#''!''@''$''%''^''&''*''-''+''*''/''['']''{''}']+
 let white = ['\t'' ']
 let newline = '\n'
 
@@ -32,5 +33,6 @@ rule token = parse
 	| white+				{ token lexbuf }
 	| types					{ TYPE (lexeme lexbuf) }
 	| idents				{ IDENT (lexeme lexbuf) }
+	| operators				{ OPERATOR (lexeme lexbuf) }
 	| eof					{ EOF }
 	| _						{ BADTOK }
