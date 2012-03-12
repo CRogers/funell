@@ -21,7 +21,14 @@ let lastIndent = ref 0
 
 let types = ['A'-'Z']['a'-'z''A'-'Z''0'-'9']*
 let idents = ['a'-'z''A'-'Z''0'-'9']+
-let operators = ['<''>''.'':''|''\\''?''='':''~''#''!''@''$''%''^''&''*''-''+''*''/''['']''{''}']+
+
+(* There are a few reserved symbols, however we want poeople to be able to use theses symbols as parts *)
+(* of larger operators, so don't allow reservedOps on their own but allow them when combined *)
+let op = ['<''>''.'':''|''\\''?'':''~''#''!''@''$''%''^''&''*''-''+''*''/''['']''{''}''=']
+let reservedOp = ['=''|']
+let opNoRes = op # reservedOp
+let operators = opNoRes+ | op* reservedOp op+ | op+ reservedOp op*
+
 let white = ['\t'' ']
 let newline = '\n'
 
@@ -33,6 +40,7 @@ rule token = parse
 	| white+				{ token lexbuf }
 	| types					{ TYPE (lexeme lexbuf) }
 	| idents				{ IDENT (lexeme lexbuf) }
-	| operators				{ OPERATOR (lexeme lexbuf) }
+	| operators 			{ OPERATOR (lexeme lexbuf) }
+	| '='					{ ASSIGN }
 	| eof					{ EOF }
 	| _						{ BADTOK }

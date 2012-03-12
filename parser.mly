@@ -1,7 +1,7 @@
 %token<string>	IDENT OPERATOR TYPE
 %token<int> 	INTEGER
 %token			INDENT OUTDENT SEP
-%token 			EOF LET
+%token 			EOF LET ASSIGN
 %token			BADTOK
 
 %start program

@@ -9,3 +9,4 @@ let fmt_token =
 		| OUTDENT -> "OUTDENT"
 		| SEP -> "SEP"
 		| EOF -> "EOF"
+		| ASSIGN -> "ASSIGN"
