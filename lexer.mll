@@ -13,11 +13,12 @@ let kwtable =
 	makehash 64
 		[("=", ASSIGN); ("(", LPAR); (")", RPAR); ("let", LET); ("in", IN); ("|", GUARD); ("type", TYPEDECL) ] 
 
-let lastIndent = ref 0
-
 (* Look up to see if s is a keyword, if so return the appropriate token otherwise use f to make token *)
 let seeIfKw s f =
 	try Hashtbl.find kwtable s with Not_found -> f s
+
+let lastIndent = ref 0
+let lineno = ref 1
 
 }
 
@@ -30,12 +31,14 @@ let newline = '\n'
 
 rule token = parse
 	| newline white*        { let indent = String.length (lexeme lexbuf) - 1 and li = !lastIndent in
+	                          incr lineno;
 	                          lastIndent := indent;
-	                          if indent == li then SEP
-	                          else (if indent > li then INDENT else OUTDENT) }
+							  token lexbuf
+	                          (*if indent == li then SEP
+	                          else (if indent > li then INDENT else OUTDENT)*) }
 	| white+                { token lexbuf }
 	| types                 { TYPE (lexeme lexbuf) }
 	| idents                { seeIfKw (lexeme lexbuf) (fun s -> IDENT s) }
 	| operators             { seeIfKw (lexeme lexbuf) (fun s -> OPERATOR s) }
 	| eof                   { EOF }
-	| _                     { BADTOK }
+	| _                     { seeIfKw (lexeme lexbuf) (fun s -> BADTOK s) }

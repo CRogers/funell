@@ -2,7 +2,7 @@
 %token<int>     INTEGER
 %token          INDENT OUTDENT SEP
 %token          EOF ASSIGN LPAR RPAR LET IN GUARD TYPEDECL
-%token          BADTOK
+%token<string>  BADTOK
 
 %left OPERATOR
 %left IDENT
@@ -20,7 +20,7 @@ open Tree
 %%
 
 program:
-	| decls EOF                                                  { Program $1 };
+	| decls                                                      { Program $1 };
 
 decls:
 	/* empty */                                                  { [] }
