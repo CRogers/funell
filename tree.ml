@@ -1,7 +1,7 @@
 type param = string
 
 type expr = 
-	| FuncCall of string * expr list
+	| Call of string * expr list
 	| Number of int
 
 type typeExpr =
@@ -11,7 +11,7 @@ type typeExpr =
 type arg = string
 
 type decl = 
-	| FuncDecl of string * arg list * expr
+	| Decl of string * arg list * expr
 	| TypeDecl of string * string list * typeExpr
 
 type program = Program of decl list

@@ -23,21 +23,21 @@ program:
 	| decls EOF                                                  { Program $1 };
 
 decls:
-    /* empty */                                                  { [] }
+	/* empty */                                                  { [] }
 	| funcDecl decls                                             { $1 :: $2 };
 
 
 funcDecl:
-	| IDENT emptyIdentList ASSIGN expr                           { FuncDecl ($1, $2, $4) }
-	| OPERATOR IDENT IDENT ASSIGN expr                           { FuncDecl ($1, [$2; $3], $5) };
+	| IDENT emptyIdentList ASSIGN callExpr                       { Decl ($1, $2, $4) }
+	| OPERATOR IDENT IDENT ASSIGN callExpr                       { Decl ($1, [$2; $3], $5) };
 
-topLevelExpr:
-	| IDENT emptyExprList                                        { FuncCall ($1, $2) }
-	| topLevelExpr OPERATOR topLevelExpr                         { FuncCall ($2, [$1; $3]) };
+callExpr:
+	| IDENT emptyExprList                                        { Call ($1, $2) }
+	| callExpr OPERATOR callExpr                                 { Call ($2, [$1; $3]) };
 
 expr:
-	| IDENT                                                      { FuncCall ($1, []) }
-	| LPAR topLevelExpr RPAR                                     { $2 };
+	| IDENT                                                      { Call ($1, []) }
+	| LPAR callExpr RPAR                                         { $2 };
 
 exprList:
 	| expr exprList                                              { $1 :: $2 }
