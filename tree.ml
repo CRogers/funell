@@ -1,13 +1,17 @@
 type param = string
 
 type expr = 
-	| FuncCall of param list
-	| OpCall of param * param
+	| FuncCall of string * expr list
 	| Number of int
+
+type typeExpr =
+	| Type of string * typeExpr list
+	| RawType of string * string list
 
 type arg = string
 
 type decl = 
-	| Function of string * arg list * expr
+	| FuncDecl of string * arg list * expr
+	| TypeDecl of string * string list * typeExpr
 
-type program = Program of string
+type program = Program of decl list
