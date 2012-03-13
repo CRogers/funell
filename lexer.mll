@@ -11,23 +11,19 @@ let makehash n vs =
 (* A small hashtable for keywords *)
 let kwtable = 
 	makehash 64
-		[("let", LET); ]
-
-let lookup s = try Hashtbl.find kwtable s with Not_found -> IDENT s  
+		[("=", ASSIGN); ("(", LPAR); (")", RPAR); ("let", LET); ("in", IN); ("|", GUARD); ("type", TYPEDECL) ] 
 
 let lastIndent = ref 0
+
+(* Look up to see if s is a keyword, if so return the appropriate token otherwise use f to make token *)
+let seeIfKw s f =
+	try Hashtbl.find kwtable s with Not_found -> f s
 
 }
 
 let types = ['A'-'Z']['a'-'z''A'-'Z''0'-'9']*
 let idents = ['a'-'z''A'-'Z''0'-'9']+
-
-(* There are a few reserved symbols, however we want poeople to be able to use theses symbols as parts *)
-(* of larger operators, so don't allow reservedOps on their own but allow them when combined *)
-let op = ['<''>''.'':''|''\\''?'':''~''#''!''@''$''%''^''&''*''-''+''*''/''['']''{''}''=']
-let reservedOp = ['=''|']
-let opNoRes = op # reservedOp
-let operators = opNoRes+ | op* reservedOp op+ | op+ reservedOp op*
+let operators = ['<''>''.'':''|''\\''?'':''~''#''!''@''$''%''^''&''*''-''+''*''/''['']''{''}''=']+
 
 let white = ['\t'' ']
 let newline = '\n'
@@ -39,8 +35,7 @@ rule token = parse
 							  else (if indent > li then INDENT else OUTDENT) }
 	| white+				{ token lexbuf }
 	| types					{ TYPE (lexeme lexbuf) }
-	| idents				{ IDENT (lexeme lexbuf) }
-	| operators 			{ OPERATOR (lexeme lexbuf) }
-	| '='					{ ASSIGN }
+	| idents				{ seeIfKw (lexeme lexbuf) (fun s -> IDENT s) }
+	| operators 			{ seeIfKw (lexeme lexbuf) (fun s -> OPERATOR s) }
 	| eof					{ EOF }
 	| _						{ BADTOK }

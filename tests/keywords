@@ -1,0 +1,2 @@
+type a = A | B | CC
+x = let x = 4 in Foo <*> bar
