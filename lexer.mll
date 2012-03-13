@@ -29,13 +29,13 @@ let white = ['\t'' ']
 let newline = '\n'
 
 rule token = parse
-	| newline white*		{ let indent = String.length (lexeme lexbuf) - 1 and li = !lastIndent in
-							  lastIndent := indent;
-							  if indent == li then SEP
-							  else (if indent > li then INDENT else OUTDENT) }
-	| white+				{ token lexbuf }
-	| types					{ TYPE (lexeme lexbuf) }
-	| idents				{ seeIfKw (lexeme lexbuf) (fun s -> IDENT s) }
-	| operators 			{ seeIfKw (lexeme lexbuf) (fun s -> OPERATOR s) }
-	| eof					{ EOF }
-	| _						{ BADTOK }
+	| newline white*        { let indent = String.length (lexeme lexbuf) - 1 and li = !lastIndent in
+	                          lastIndent := indent;
+	                          if indent == li then SEP
+	                          else (if indent > li then INDENT else OUTDENT) }
+	| white+                { token lexbuf }
+	| types                 { TYPE (lexeme lexbuf) }
+	| idents                { seeIfKw (lexeme lexbuf) (fun s -> IDENT s) }
+	| operators             { seeIfKw (lexeme lexbuf) (fun s -> OPERATOR s) }
+	| eof                   { EOF }
+	| _                     { BADTOK }

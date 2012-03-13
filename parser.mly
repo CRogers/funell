@@ -16,4 +16,4 @@ open Tree
 %%
 
 program:
-	EOF						{ Program "foo" };
+	EOF                          { Program "foo" };
