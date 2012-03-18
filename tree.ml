@@ -1,8 +1,9 @@
 type param = string
 
 type expr = 
-	| Call of string * expr list
+	| Apply of expr * expr
 	| Number of int
+	| Ident of string
 
 type typeExpr =
 	| Type of string * typeExpr list
@@ -15,3 +16,6 @@ type decl =
 	| TypeDecl of string * string list * typeExpr
 
 type program = Program of decl list
+
+
+let binOp op l r = Apply ((Apply (Ident op, l)), r)

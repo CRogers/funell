@@ -33,7 +33,7 @@ rule token = parse
 	| newline white*        { let indent = String.length (lexeme lexbuf) - 1 and li = !lastIndent in
 	                          incr lineno;
 	                          lastIndent := indent;
-							  token lexbuf
+							  SEP
 	                          (*if indent == li then SEP
 	                          else (if indent > li then INDENT else OUTDENT)*) }
 	| white+                { token lexbuf }

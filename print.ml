@@ -11,7 +11,6 @@ let backwardtable = revtbl kwtable 64
 
 let read_lineno file lineno =
 	let in_chan = open_in file in
-	Printf.printf "file: %s, line: %d" file lineno;
 	for i=1 to lineno-1 do
 		input_line in_chan
 	done;
@@ -40,7 +39,7 @@ let fmt_token =
 
 let id s = s
 
-let fmt_list formatter list = "[" ^ (List.fold_left (fun result item -> result ^ formatter item ^ "; ") "" list) ^ "]"
+let fmt_list formatter list = "[" ^ (List.fold_left (fun result item -> result ^ formatter item ^ ", ") "" list) ^ "]"
 
 let rec fmt_expr =
 	function
@@ -52,4 +51,4 @@ let rec fmt_decl =
 
 let rec fmt_program = 
 	function
-		| Program decls -> List.fold_left (fun result decl -> result ^ "\n" ^ fmt_decl decl) "" decls
+		| Program decls -> List.fold_left (fun result decl -> result ^ fmt_decl decl ^ "\n") "" decls
