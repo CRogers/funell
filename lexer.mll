@@ -2,17 +2,12 @@
 	
 open Parser
 open Lexing
-
-let makehash n vs =
-	let ht = Hashtbl.create n in
-	List.iter (fun (k, v) -> Hashtbl.add ht k v) vs;
-	ht
+open Tree
 
 (* A small hashtable for keywords *)
 let kwtable = 
 	makehash 64
-		[("=", ASSIGN); ("(", LPAR); (")", RPAR); ("let", LET); ("in", IN); ("|", GUARD); 
-		 ("type", TYPEDECL); ("infixr", INFIXR); ("infixl", INFIXL)
+		[("=", ASSIGN); ("(", LPAR); (")", RPAR); ("let", LET); ("in", IN);
 		] 
 
 (* A hashtable to keep a list of infix *)
@@ -37,6 +32,5 @@ rule token = parse
 	| white+                { token lexbuf }
 	| types                 { TYPE (lexeme lexbuf) }
 	| idents                { seeIfKw (lexeme lexbuf) (fun s -> IDENT s) }
-	| operators             { seeIfKw (lexeme lexbuf) (fun s -> OPERATOR s) }
-	| eof                   { EOF }
+	| operators             { seeIfKw (lexeme lexbuf) (fun s -> OPL0 s) }
 	| _                     { seeIfKw (lexeme lexbuf) (fun s -> BADTOK s) }

@@ -13,9 +13,16 @@ type arg = string
 
 type decl = 
 	| Decl of string * arg list * expr
-	| TypeDecl of string * string list * typeExpr
 
 type program = Program of decl list
 
 
 let binOp op l r = Apply ((Apply (Ident op, l)), r)
+
+
+let addToHash ht vs = List.iter (fun (k, v) -> Hashtbl.add ht k v) vs
+
+let makehash n vs =
+	let ht = Hashtbl.create n in
+	addToHash ht vs;
+	ht

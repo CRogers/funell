@@ -1,7 +1,6 @@
 %token<string>  IDENT TYPE
 %token<int>     INTEGER
-%token          INFIXL INFIXR SEP
-%token          EOF ASSIGN LPAR RPAR LET IN GUARD TYPEDECL
+%token          SEP ASSIGN LPAR RPAR LET IN
 %token<string>  BADTOK
 %token<string>  OPL0 OPL1 OPL2 OPL3 OPL4 /*OPL5 OPL6 OPL7 OPL8 OPL9 OPL10 OPL11 OPL12 OPL13 OPL14 OPL15 OPL16 OPL17 OPL18 OPL19 OPL20*/
 %token<string>  OPR0 OPR1 OPR2 OPR3 OPR4 /*OPR5 OPR6 OPR7 OPR8 OPR9 OPR10 OPR11 OPR12 OPR13 OPR14 OPR15 OPR16 OPR17 OPR18 OPR19 OPR20*/
@@ -25,6 +24,10 @@
 
 open Tree
 
+(* A hashtable to keep a list of infix operator precedents *)
+let optable: (string, token) Hashtbl.t = Hashtbl.create 64
+
+let getOperator op = Hashtbl.find optable op 
 
 %}
 

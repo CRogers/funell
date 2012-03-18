@@ -22,19 +22,24 @@ let err_msg msg lineno file =
 let fmt_token =
 	function
 		| IDENT s -> "(IDENT " ^ s ^ ")"
+		| INTEGER i -> "(INTEGER " ^ string_of_int i ^ ")"
 		| TYPE s -> "(TYPE " ^ s ^ ")"
-		| OPERATOR s -> "(OPERATOR " ^ s ^ ")" 
-		| INDENT -> "INDENT"
-		| OUTDENT -> "OUTDENT"
+		| OPL0 s -> "(OPL0 " ^ s ^ ")"
+		| OPL1 s -> "(OPL1 " ^ s ^ ")"
+		| OPL2 s -> "(OPL2 " ^ s ^ ")"
+		| OPL3 s -> "(OPL3 " ^ s ^ ")"
+		| OPL4 s -> "(OPL4 " ^ s ^ ")"
+		| OPR0 s -> "(OPR0 " ^ s ^ ")"
+		| OPR1 s -> "(OPR1 " ^ s ^ ")"
+		| OPR2 s -> "(OPR2 " ^ s ^ ")"
+		| OPR3 s -> "(OPR3 " ^ s ^ ")"
+		| OPR4 s -> "(OPR4 " ^ s ^ ")"
 		| SEP -> "SEP"
-		| EOF -> "EOF"
 		| ASSIGN -> "ASSIGN"
 		| LPAR -> "LPAR"
 		| RPAR -> "RPAR"
 		| LET -> "LET"
 		| IN -> "IN"
-		| GUARD -> "GUARD"
-		| TYPEDECL -> "TYPEDECL"
 		| BADTOK s -> "(BADTOK " ^ s ^ ")"
 
 let id s = s
@@ -43,7 +48,9 @@ let fmt_list formatter list = "[" ^ (List.fold_left (fun result item -> result ^
 
 let rec fmt_expr =
 	function
-		| Call (name, args) -> Printf.sprintf "(Call %s %s)" name (fmt_list fmt_expr args)
+		| Apply (name, arg) -> Printf.sprintf "(Apply %s %s)" (fmt_expr name) (fmt_expr arg)
+		| Ident s -> s
+		| Number i -> string_of_int i
 
 let rec fmt_decl =
 	function
