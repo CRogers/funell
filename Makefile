@@ -1,15 +1,9 @@
-# see: http://www.ocaml.info/home/ocaml_sources.html#toc16
-
-# put here the names of your source files (in the right order)
-SOURCES = tree.ml parser.mly lexer.mll print.ml main.ml
-
-# the name of the resulting executable
-RESULT  = bin/funell
-
-# generate type information (.annot files)
-ANNOTATE = yes
-
-# make target (see manual) : byte-code, debug-code, native-code, ...
-all: debug-code
+# Add --table on the next line to use Menhir's table-based back-end.
+PGFLAGS         := --infer
+GENERATED       := parser.ml parser.mli lexer.ml
+MODULES         := tree print parser lexer main
+EXECUTABLE      := bin/funell
+OCAMLDEPWRAPPER := ocamldep.wrapper
 
 include OCamlMakefile
+$(eval $(call menhir_monomodule,parser))

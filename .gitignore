@@ -12,3 +12,6 @@ bin/
 lexer.ml
 parser.ml
 *.output
+*.d
+*.cmx
+*.o
