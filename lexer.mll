@@ -11,13 +11,16 @@ let makehash n vs =
 (* A small hashtable for keywords *)
 let kwtable = 
 	makehash 64
-		[("=", ASSIGN); ("(", LPAR); (")", RPAR); ("let", LET); ("in", IN); ("|", GUARD); ("type", TYPEDECL) ] 
+		[("=", ASSIGN); ("(", LPAR); (")", RPAR); ("let", LET); ("in", IN); ("|", GUARD); 
+		 ("type", TYPEDECL); ("infixr", INFIXR); ("infixl", INFIXL)
+		] 
+
+(* A hashtable to keep a list of infix *)
 
 (* Look up to see if s is a keyword, if so return the appropriate token otherwise use f to make token *)
 let seeIfKw s f =
 	try Hashtbl.find kwtable s with Not_found -> f s
 
-let lastIndent = ref 0
 let lineno = ref 1
 
 }
@@ -30,12 +33,7 @@ let white = ['\t'' ']
 let newline = '\n'
 
 rule token = parse
-	| newline white*        { let indent = String.length (lexeme lexbuf) - 1 and li = !lastIndent in
-	                          incr lineno;
-	                          lastIndent := indent;
-							  SEP
-	                          (*if indent == li then SEP
-	                          else (if indent > li then INDENT else OUTDENT)*) }
+	| newline               { incr lineno; SEP }
 	| white+                { token lexbuf }
 	| types                 { TYPE (lexeme lexbuf) }
 	| idents                { seeIfKw (lexeme lexbuf) (fun s -> IDENT s) }

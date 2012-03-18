@@ -1,6 +1,7 @@
 %token<string>  IDENT TYPE
 %token<int>     INTEGER
 %token          INDENT OUTDENT SEP
+%token          INFIXL INFIXR
 %token          EOF ASSIGN LPAR RPAR LET IN GUARD TYPEDECL
 %token<string>  BADTOK
 %token<string>  OPL0 OPL1 OPL2 OPL3 OPL4 /*OPL5 OPL6 OPL7 OPL8 OPL9 OPL10 OPL11 OPL12 OPL13 OPL14 OPL15 OPL16 OPL17 OPL18 OPL19 OPL20*/
@@ -18,6 +19,7 @@
 %{
 
 open Tree
+
 
 %}
 
