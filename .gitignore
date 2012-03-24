@@ -17,3 +17,4 @@ parser.ml
 *.o
 *.native
 _build/
+funell
