@@ -2,8 +2,7 @@
 %token<string> OPERATOR
 %token<int>    NUMBER
 
-%start     program
-%type<int> int  
+%start<unit>   program
 
 %{
 
@@ -32,18 +31,16 @@ let addOp infix op prec =
 		Hashtbl.find optable op;
 		raise (Failure Printf.sprintf "Infix operator %s already defined!" op)) 
 	with
-		Not_found ->
-			let 
-			Hashtbl.add optable op (getOp op)
+		Not_found -> Hashtbl.add optable op (getOp op)
+
 
 %}
 
 %%
 
 program:
-	| infix=infixes; op=OPERATOR; num=NUMBER; SEP program           { addOp infix op num }
-	| OPERATOR program
-	| NUMBER program
+	| infix=infixes; op=OPERATOR; num=NUMBER; SEP program          { addOp infix op num }
+	| SEP program                                                  { }
 
 %inline infixes:
 	| INFIXL                                                       { $1 }

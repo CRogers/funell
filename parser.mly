@@ -16,10 +16,6 @@
 %left  OPL4
 %right OPR4
 
-
-%start program
-%type<Tree.program> program
-
 %{
 
 open Tree
@@ -30,6 +26,9 @@ let optable: (string, token) Hashtbl.t = Hashtbl.create 64
 let getOperator op = Hashtbl.find optable op 
 
 %}
+
+%start program
+%type<Tree.program> program
 
 %%
 
