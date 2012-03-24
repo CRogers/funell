@@ -13,10 +13,10 @@ let operators = ['<''>''.'':''|''\\''?'':''~''#''!''@''$''%''^''&''*''-''+''*''/
 let num = ['1'-'9']+
 
 rule token = parse
-	| newline               { incr lineno; SEP }
+	| newline               { incr lineno; LINEBREAK }
 	| "infixl"              { INFIXL }
 	| "infixr"              { INFIXR }
-	| operators             { OPERATOR }
+	| operators             { OPERATOR (lexeme lexbuf) }
 	| num                   { NUMBER (int_of_string (lexeme lexbuf)) }
-	| eof                   { EOF }
+	| eof                   { PREEOF }
 	| _                     { token lexbuf }

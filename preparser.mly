@@ -1,47 +1,44 @@
-%token         INFIXR INFIXL SEP
+%token         INFIXR INFIXL LINEBREAK PREEOF
 %token<string> OPERATOR
 %token<int>    NUMBER
 
-%start<unit>   program
+%start<int> program
 
 %{
 
 open Tree
-open Parser
+open Parserlib
 
-(* Put builtin operators into optable *)
-addToHash optable [("+", OPL2); ("-", OPL2); ("*", OPL3); ("/", OPL4)]
+let getOp infix v prec = match infix with
+	| INFIXL -> (match prec with
+		| 0 -> Parser.OPL0 v
+		| 1 -> Parser.OPL1 v
+		| 2 -> Parser.OPL2 v
+		| 3 -> Parser.OPL3 v
+		| 4 -> Parser.OPL4 v)
+	| INFIXR -> (match prec with
+		| 0 -> Parser.OPR0 v
+		| 1 -> Parser.OPR1 v
+		| 2 -> Parser.OPR2 v
+		| 3 -> Parser.OPR3 v
+		| 4 -> Parser.OPR4 v)
 
-let getOp infix prec = match infix with
-	| INFIXL -> match prec with
-		| 0 -> OPL0
-		| 1 -> OPL1
-		| 2 -> OPL2
-		| 3 -> OPL3
-		| 4 -> OPL4
-	| INFIXR -> match prec with
-		| 0 -> OPR0
-		| 1 -> OPR1
-		| 2 -> OPR2
-		| 3 -> OPR3
-		| 4 -> OPR4
-
-let addOp infix op prec =
-	try
-		Hashtbl.find optable op;
-		raise (Failure Printf.sprintf "Infix operator %s already defined!" op)) 
-	with
-		Not_found -> Hashtbl.add optable op (getOp op)
-
+let addOp infix op prec = Hashtbl.add optable op (getOp infix op prec)
 
 %}
 
 %%
 
 program:
-	| infix=infixes; op=OPERATOR; num=NUMBER; SEP program          { addOp infix op num }
-	| SEP program                                                  { }
+	| infixDef program                                             { 0 }
+	| ignores; prog=program                                        { prog }
+	| PREEOF                                                       { 0 }
 
-%inline infixes:
-	| INFIXL                                                       { $1 }
-	| INFIXR                                                       { $1 }
+infixDef:
+	| INFIXL OPERATOR NUMBER                                       { addOp INFIXL $2 $3; 0 }
+	| INFIXR OPERATOR NUMBER                                       { addOp INFIXR $2 $3; 0 }
+
+%inline ignores:
+	| i=OPERATOR                                                   { 0 }
+	| i=LINEBREAK                                                  { 0 }
+	| i=NUMBER                                                     { 0 }

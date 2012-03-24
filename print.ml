@@ -1,3 +1,4 @@
+open Preparser
 open Parser
 open Lexer
 open Tree
@@ -19,6 +20,15 @@ let read_lineno file lineno =
 let err_msg msg lineno file =
 	Printf.printf "Error: %s at line %d in file %s:\n%s\n" msg lineno file (read_lineno file lineno)
 
+let fmt_pretoken =
+	function
+		| INFIXR -> "INFIXR"
+		| INFIXL -> "INFIXL"
+		| OPERATOR s -> "(OPERATOR " ^ s ^ ")"
+		| NUMBER i -> "(NUMBER " ^ string_of_int i ^ ")"
+		| LINEBREAK -> "LINEBREAK"
+		| PREEOF -> "PREEOF"
+
 let fmt_token =
 	function
 		| IDENT s -> "(IDENT " ^ s ^ ")"
@@ -34,12 +44,15 @@ let fmt_token =
 		| OPR2 s -> "(OPR2 " ^ s ^ ")"
 		| OPR3 s -> "(OPR3 " ^ s ^ ")"
 		| OPR4 s -> "(OPR4 " ^ s ^ ")"
+		| EOF -> "EOF"
 		| SEP -> "SEP"
 		| ASSIGN -> "ASSIGN"
 		| LPAR -> "LPAR"
 		| RPAR -> "RPAR"
 		| LET -> "LET"
 		| IN -> "IN"
+		| OPINFIXR -> "OPINFIXR"
+		| OPINFIXL -> "OPINFIXL"
 		| BADTOK s -> "(BADTOK " ^ s ^ ")"
 
 let id s = s

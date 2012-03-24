@@ -18,3 +18,5 @@ parser.ml
 *.native
 _build/
 funell
+*.automaton
+*.conflicts

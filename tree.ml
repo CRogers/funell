@@ -1,3 +1,9 @@
+type infixdef = 
+	| Infixl of string * int
+	| Infixr of string * int
+
+
+
 type param = string
 
 type expr = 
