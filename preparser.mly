@@ -30,15 +30,16 @@ let addOp infix op prec = Hashtbl.add optable op (getOp infix op prec)
 %%
 
 program:
-	| infixDef program                                             { 0 }
-	| ignores; prog=program                                        { prog }
+	| i=infixes op=OPERATOR n=NUMBER linebreakEof                  { addOp i op n; 0 }
+	| OPERATOR program                                             { 0 }
+	| LINEBREAK program                                            { 0 }
+	| NUMBER program                                               { 0 }
 	| PREEOF                                                       { 0 }
 
-infixDef:
-	| INFIXL OPERATOR NUMBER                                       { addOp INFIXL $2 $3; 0 }
-	| INFIXR OPERATOR NUMBER                                       { addOp INFIXR $2 $3; 0 }
+infixes:
+	| INFIXL                                                       { INFIXL }
+	| INFIXR                                                       { INFIXR }
 
-%inline ignores:
-	| i=OPERATOR                                                   { 0 }
-	| i=LINEBREAK                                                  { 0 }
-	| i=NUMBER                                                     { 0 }
+linebreakEof:
+	| LINEBREAK program                                            { 0 }
+	| PREEOF                                                       { 0 }
