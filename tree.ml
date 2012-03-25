@@ -8,7 +8,7 @@ type param = string
 
 type expr = 
 	| Apply of expr * expr
-	| Number of int
+	| Int of int
 	| Ident of string
 
 type typeExpr =

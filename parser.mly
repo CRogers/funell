@@ -58,6 +58,7 @@ applyExpr:
 /* Basic tokens */
 basicExpr:
 	| IDENT                                                      { Ident $1 }
+	| INTEGER                                                    { Int $1 }
 	| LPAR expr RPAR                                             { $2 };
 		
 

@@ -20,3 +20,4 @@ _build/
 funell
 *.automaton
 *.conflicts
+*.swp

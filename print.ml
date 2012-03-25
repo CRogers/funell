@@ -63,7 +63,7 @@ let rec fmt_expr =
 	function
 		| Apply (name, arg) -> Printf.sprintf "(Apply %s %s)" (fmt_expr name) (fmt_expr arg)
 		| Ident s -> s
-		| Number i -> string_of_int i
+		| Int i -> string_of_int i
 
 let rec fmt_decl =
 	function
