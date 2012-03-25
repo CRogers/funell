@@ -10,7 +10,7 @@ let lineno = ref 1
 
 let newline = '\n'
 let operators = ['<''>''.'':''|''\\''?'':''~''#''!''@''$''%''^''&''*''-''+''*''/''['']''{''}''=']+
-let num = ['1'-'9']+
+let num = ['0'-'9']+
 
 rule token = parse
 	| newline               { incr lineno; LINEBREAK }
