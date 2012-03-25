@@ -27,7 +27,7 @@ let fmt_pretoken =
 		| OPERATOR s -> "(OPERATOR " ^ s ^ ")"
 		| NUMBER i -> "(NUMBER " ^ string_of_int i ^ ")"
 		| LINEBREAK -> "LINEBREAK"
-		| PREEOF -> "PREEOF"
+		| PREEOF -> "EOF"
 
 let fmt_token =
 	function

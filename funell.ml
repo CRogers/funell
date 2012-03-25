@@ -5,9 +5,11 @@ open Lexing
 let print_lex file fmt_func lexer_func =
 	let in_chan = open_in file in
 	let lexbuf = Lexing.from_channel in_chan in
-	
-	while not lexbuf.lex_eof_reached do
-		Printf.printf "%s " (fmt_func (lexer_func lexbuf))
+	let eof = ref true in
+	while !eof do
+		let token = (fmt_func (lexer_func lexbuf)) in
+		if token = "EOF" then eof := false;
+		Printf.printf "%s " token
 	done
 
 let print_parse prog = print_endline (fmt_program prog)
