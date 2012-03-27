@@ -61,7 +61,7 @@ let fmt_list formatter list = "[" ^ (List.fold_left (fun result item -> result ^
 
 let rec fmt_expr =
 	function
-		| Apply (name, arg) -> Printf.sprintf "(Apply %s %s)" (fmt_expr name) (fmt_expr arg)
+		| Apply (name, arg) -> Printf.sprintf "(Apply %s %s)" (fmt_expr name) (fmt_list fmt_expr arg)
 		| Ident s -> s
 		| Int i -> string_of_int i
 

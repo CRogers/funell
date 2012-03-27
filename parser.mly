@@ -44,31 +44,26 @@ funcDecl:
 	| IDENT emptyIdentList ASSIGN expr                           { Decl ($1, $2, $4) }
 	| i1=IDENT; op=operator; i2=IDENT; ASSIGN; e=expr            { Decl (op, [i1; i2], e) };
 
-/* Synatical expressions */
+/* Expr */
 expr:
-	| LET funcDecl IN expr                                       { $4 }
-	| applyExpr                                                  { $1 }
+	| l=expr op=operator r=expr                                  { Apply (Ident op, [l; r]) } 
+	| funcExpr                                                   { $1 }
 
-/* Function calls */
-applyExpr:
-	| basicExpr                                                  { $1 }
-	| IDENT basicExpr                                            { Apply (Ident $1, $2) }
-	| e1=applyExpr; op=operator; e2=applyExpr                    { binOp op e1 e2 }
+funcExpr:
+	| basicExpr basicExprList                                    { Apply ($1, $2) }
 
-/* Basic tokens */
 basicExpr:
 	| IDENT                                                      { Ident $1 }
 	| INTEGER                                                    { Int $1 }
-	| LPAR expr RPAR                                             { $2 };
-		
+	| LPAR expr RPAR                                             { $2 }
 
-identList:
-	| IDENT identList                                            { $1 :: $2 }
-	| IDENT                                                      { [$1] };
-		
+basicExprList:
+	/* empty */                                                  { [] }
+	| basicExpr basicExprList                                    { $1 :: $2 }
+
 emptyIdentList:
 	/* empty */                                                  { [] }
-	| identList                                                  { $1 };
+	| IDENT emptyIdentList                                       { $1 :: $2 }
 
 %inline operator:
 	| op = OPL0                                                  { op }

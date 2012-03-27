@@ -7,7 +7,7 @@ type infixdef =
 type param = string
 
 type expr = 
-	| Apply of expr * expr
+	| Apply of expr * expr list
 	| Int of int
 	| Ident of string
 
