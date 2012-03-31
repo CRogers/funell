@@ -17,8 +17,21 @@ type typeExpr =
 
 type arg = string
 
+type ftype = 
+	| EmptyFT
+	| FType of string * ftype
+
+type typePattern =
+	| PatternParam of string
+	| PatternType of string
+	| Pattern of typePattern list
+
 type decl = 
-	| Decl of string * arg list * expr
+	| DeclPlaceholder
+	(* Fucntion declare of  funcName * args * right hand expr * type *)
+	| Decl of string * arg list * expr * ftype
+	| DataDecl of string * string list * decl list
+	| RightDataDecl of string * typePattern list * decl
 
 type program = Program of decl list
 

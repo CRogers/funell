@@ -1,0 +1,2 @@
+data List = Cons Int List | Empty
+data List a = Cons Int (List a) | EmptyList

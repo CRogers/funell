@@ -1,5 +1,4 @@
-infixl -: 4
-infixr </.> 2
+infixr </.> 0
 
 infixl -: 4
 f -: g = a * b + c </.> d

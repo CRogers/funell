@@ -53,11 +53,17 @@ let fmt_token =
 		| IN -> "IN"
 		| OPINFIXR -> "OPINFIXR"
 		| OPINFIXL -> "OPINFIXL"
+		| DATADECL -> "DATADECL"
+		| TYPEDECL -> "TYPEDECL"
+		| GUARD -> "GUARD"
 		| BADTOK s -> "(BADTOK " ^ s ^ ")"
 
 let id s = s
 
-let fmt_list formatter list = "[" ^ (List.fold_left (fun result item -> result ^ formatter item ^ ", ") "" list) ^ "]"
+let fmt_list formatter = 
+	function 
+		| [] -> "[]"
+		| (head::tail) -> "[" ^ (List.fold_left (fun result item -> result ^ ", " ^ formatter item) (formatter head) tail) ^ "]"
 
 let rec fmt_expr =
 	function
@@ -65,9 +71,18 @@ let rec fmt_expr =
 		| Ident s -> s
 		| Int i -> string_of_int i
 
+let rec fmt_typePattern = 
+	function
+		| PatternParam param -> param
+		| PatternType ftype -> ftype
+		| Pattern patterns -> Printf.sprintf "(Pattern %s)" (fmt_list fmt_typePattern patterns)
+
 let rec fmt_decl =
 	function
-		| Decl (name, args, e) -> Printf.sprintf "(Decl %s %s %s)" name (fmt_list id args) (fmt_expr e)
+		| DeclPlaceholder -> "DeclPlaceholder"
+		| Decl (name, args, e, ft) -> Printf.sprintf "(Decl %s %s %s)" name (fmt_list id args) (fmt_expr e)
+		| DataDecl (name, typeArgs, decls) -> Printf.sprintf "(DataDecl %s %s %s)" name (fmt_list id typeArgs) (fmt_list fmt_decl decls)
+		| RightDataDecl (name, patterns, declare) -> Printf.sprintf "(RightDataDecl %s %s %s)" name (fmt_list fmt_typePattern patterns) (fmt_decl declare)
 
 let rec fmt_program = 
 	function

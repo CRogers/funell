@@ -9,7 +9,8 @@ open Parserlib
 let kwtable = 
 	makehash 64
 		[("=", ASSIGN); ("(", LPAR); (")", RPAR); ("let", LET); ("in", IN);
-		 ("infixr", OPINFIXR); ("infixl", OPINFIXL)
+		 ("infixr", OPINFIXR); ("infixl", OPINFIXL); ("data", DATADECL); ("type", TYPEDECL);
+		 ("|", GUARD);
 		] 
 
 (* A hashtable to keep a list of infix *)
